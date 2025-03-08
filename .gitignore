@@ -1,0 +1,4 @@
+# Ignore simulation files
+*.vcd
+*.out
+/sim
