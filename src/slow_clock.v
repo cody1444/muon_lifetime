@@ -10,7 +10,7 @@ module slow_clock (
     end
 
     always @(posedge clk) begin
-        if (counter == 49999) begin
+        if (counter == 999) begin // change back to 49999
             counter <= 0;
             clk_1kHz = ~clk_1kHz;
         end else begin
