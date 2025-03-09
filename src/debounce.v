@@ -9,7 +9,7 @@ reg [18:0] cnt0=0, cnt1=0, cnt2=0, cnt3=0, cnt4=0;
 reg [4:0] IV = 0;
 
 //parameter dbTime = 500000;
-parameter dbTime = 5;
+parameter dbTime = 10;
 
 always @ (posedge(clock))begin
     if(reset==1)begin

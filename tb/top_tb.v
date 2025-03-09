@@ -20,8 +20,8 @@ module top_tb;
     always #5 clk = ~clk; // 100MHz clock → Toggle every 5ns
 
     initial begin
-        $display("Testing Top-Level Module (Button A Only)");
-        //$monitor("Time=%0t | button_A=%b | digits_A=%d | segments=%b | anodes=%b", $time, buttons[0], uut.core.counter_A.digits, segments, anodes);
+        $display("Starting Comprehensive Test (50 Presses, 25 Coincidences)");
+        $monitor("Time=%0t | button_A=%b | button_B=%b | digits_A=%d | digits_B=%d | digits_C=%d | mode=%b | segments=%b | anodes=%b", $time, buttons[0], buttons[1], uut.core_inst.counter_A.digits, uut.core_inst.counter_B.digits, uut.core_inst.counter_C.digits, sw_mode, segments, anodes);
 
         // Enable waveform dump
         $dumpfile("sim/top_tb.vcd");
@@ -29,33 +29,36 @@ module top_tb;
 
         // === Initialize Signals ===
         clk = 0;
-        buttons = 3'b000;
+        buttons = 2'b00;
+        sw_mode = 0;  // Start in Mode 0
+
+        // === CASE 1: 50 Button Presses ===
+        repeat (50) begin
+            #500;
+            if ($time % 500 == 0) begin
+                buttons[0] = 1; buttons[1] = 1; // Every 5th press, trigger coincidence
+            end
+            else if ($time % 200 == 0) begin
+                buttons[0] = 1; // Otherwise, press A
+            end
+            else begin
+                buttons[1] = 1; // Press B end
+            end
+            #150; // Controls duration of press
+            buttons[0] = 0; buttons[1] = 0; // Release buttons
+        end
+
+        // === CASE 2: Check Mode 0 (0025 0025) ===
+        #500;
         sw_mode = 0;
+        #100_000;
 
-        // === CASE 1: Increment Button A ===
-        #100;
-        buttons[0] = 1; // Press Button A
-        #100;
-        buttons[0] = 0; // Release Button A
-        #100;
+        // === CASE 3: Check Mode 1 (0005) ===
+        #500;
+        sw_mode = 1;
+        #100_000; 
 
-        #100;
-        buttons[0] = 1; // Press Button A Again
-        #100;
-        buttons[0] = 0; // Release Button A
-        #100;
-
-        #100;
-        buttons[0] = 1; // Press Button A Again
-        #100;
-        buttons[0] = 0; // Release Button A
-        #100;
-
-        // Wait and observe display changes
-        #500_000; 
-
-        $display("Test Complete");
+        $display("Comprehensive Test Complete");
         $finish;
     end
 endmodule
-
