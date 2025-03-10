@@ -1,9 +1,10 @@
 module top_core (
     input clk,            // 100MHz System Clock
-    input [1:0] buttons,  // Three input buttons (A, B, Reset)
+    input [2:0] buttons,  // Three input buttons (A, B, C)
     output [15:0] digits_A, // First counter output
     output [15:0] digits_B, // Second counter output
-    output [15:0] digits_C  // Coincidence counter output
+    output [15:0] digits_C, // Coincidence counter output
+    output [15:0] digits_D  // TDC information
 );
     
     wire [4:0] debounced_buttons;  // Debounced buttons
@@ -14,7 +15,7 @@ module top_core (
     debounce debounce_inst (
         .clock(clk),
         .reset(1'b0),
-        .button({3'b000, buttons}),
+        .button({2'b00, buttons}),
         .out(debounced_buttons)
     );
 
@@ -51,6 +52,13 @@ module top_core (
         .button(coincidence_detected), // Increment when a coincidence is detected
         .enable(1'b1),                 // Always enabled
         .digits(digits_C)
+    );
+
+    tdc_measurement #(.TIMEOUT_CYCLES(150)) tdc (
+        .clk(clk),
+        .coincidence(coincidence_detected),
+        .button_C(debounced_buttons[2]),
+        .time_measurement(digits_D)
     );
 
 endmodule

@@ -1,15 +1,34 @@
 module mode_mux (
-    input mode,                  // Mode select signal
-    input [6:0] segments_mode_0,  // Segments from full_display_controller
-    input [6:0] segments_mode_1,  // Segments from single_display_controller
-    input [7:0] anodes_mode_0,    // Anodes from full_display_controller
-    input [7:0] anodes_mode_1,    // Anodes from single_display_controller
-    output [6:0] segments,        // Final selected segments output
-    output [7:0] anodes           // Final selected anodes output
+    input [1:0] mode,   // 2-bit mode selection
+    input [6:0] segments_mode_0, segments_mode_1, segments_mode_2,
+    input [7:0] anodes_mode_0, anodes_mode_1, anodes_mode_2,
+    output reg [6:0] segments,
+    output reg [7:0] anodes
 );
 
-    // Multiplex between full and single display controllers
-    assign segments = (mode == 0) ? segments_mode_0 : segments_mode_1;
-    assign anodes = (mode == 0) ? anodes_mode_0 : anodes_mode_1;
-
+    always @(*) begin
+        case (mode)
+            2'b00: begin
+                segments = segments_mode_0;
+                anodes = anodes_mode_0;
+            end
+            2'b01: begin
+                segments = segments_mode_1;
+                anodes = anodes_mode_1;
+            end
+            2'b10: begin
+                segments = segments_mode_2;
+                anodes = anodes_mode_2;
+            end
+            2'b11: begin
+                segments = 7'b1111111;  // Blank display (All segments off)
+                anodes = 8'b11111111;   // All anodes off
+            end
+            default: begin
+                segments = segments_mode_0;
+                anodes = anodes_mode_0;
+            end
+        endcase
+    end
 endmodule
+

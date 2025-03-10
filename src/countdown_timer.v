@@ -2,8 +2,8 @@ module countdown_timer #(
     parameter COUNTDOWN_CYCLES = 5_000_000
 )(
     input clk,
-    input button_A,
-    input button_B,
+    input start,
+    input stop,
     output reg done
 );
 
@@ -28,4 +28,3 @@ module countdown_timer #(
         end 
     end
 endmodule
-
