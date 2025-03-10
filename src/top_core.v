@@ -15,6 +15,7 @@ module top_core (
     debounce debounce_inst (
         .clock(clk),
         .reset(1'b0),
+        .enable(1'b0),
         .button({2'b00, buttons}),
         .out(debounced_buttons)
     );
@@ -54,7 +55,7 @@ module top_core (
         .digits(digits_C)
     );
 
-    tdc_measurement #(.TIMEOUT_CYCLES(150)) tdc (
+    tdc_measurement #(.TIMEOUT_CYCLES(660)) tdc (
         .clk(clk),
         .coincidence(coincidence_detected),
         .button_C(debounced_buttons[2]),

@@ -1,6 +1,7 @@
 module debounce(
     input clock,//100MHz clock
     input reset,
+    input enable,
     input [4:0] button,//Buttons to debounce
     output reg [4:0] out
 );
@@ -20,7 +21,7 @@ always @ (posedge(clock))begin
         cnt4<=0;
         out<=0;
     end
-    else begin
+    else if(enable) begin
         if(button[0]==IV[0]) begin 
             if (cnt0==dbTime) begin
                 out[0]<=IV[0];
@@ -81,6 +82,9 @@ always @ (posedge(clock))begin
             cnt4<=0;
             IV[4]<=button[4];
             end
-    end
+        end else begin
+            out <= button;
+        end
 end
 endmodule
+

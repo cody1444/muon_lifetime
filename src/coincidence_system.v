@@ -1,6 +1,5 @@
 module coincidence_system #(
-    // parameter SUSPEND_CYCLES = 50_000_000
-    parameter SUSPEND_CYCLES = 10
+    parameter SUSPEND_CYCLES = 660
 )(
     input clk,           // System clock (100MHz)
     input button_A,      // Debounced button A input

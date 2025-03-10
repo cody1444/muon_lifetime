@@ -1,5 +1,5 @@
 module tdc_measurement #(
-    parameter TIMEOUT_CYCLES = 50_000_000  // Default timeout: 0.5s at 100MHz
+    parameter TIMEOUT_CYCLES = 230  // Default timeout: 0.5s at 100MHz
 )(
     input clk,           // System clock (100MHz)
     input coincidence,   // Coincidence detection signal (rising edge)

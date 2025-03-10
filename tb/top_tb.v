@@ -48,7 +48,7 @@ module top_tb;
             else begin
                 buttons[1] = 1; // Press B end
             end
-            #150; // Controls duration of press
+            #25; // Controls duration of press
             buttons[0] = 0; buttons[1] = 0; // Release buttons
         end
 
@@ -78,30 +78,32 @@ module top_tb;
 
         // === CASE 6: Coincidence & Fast C Press (Valid TDC Measurement) ===
         #500;
+        sw_left = 1; // Set dipslay to TDC mode
+        sw_right = 0;
         buttons[0] = 1; buttons[1] = 1; // Trigger coincidence
-        #150;
+        #25;
         buttons[0] = 0; buttons[1] = 0;
-        #10;   // Short delay
+        #2200;   // Short delay
         buttons[2] = 1; // Press Button C
-        #150;
+        #25;
         buttons[2] = 0; // Release Button C
         #100_000; // Allow TDC value to register
 
         // === CASE 7: Coincidence but No C Press (Timeout) ===
         #500;
         buttons[0] = 1; buttons[1] = 1; // Trigger coincidence
-        #150;
+        #25;
         buttons[0] = 0; buttons[1] = 0;
-        #200_000; // Exceed timeout (digits_D should show max value)
+        #10_000; // Exceed timeout (digits_D should show max value)
         
         // === CASE 8: Coincidence & C Press at Edge of Timeout ===
         #500;
         buttons[0] = 1; buttons[1] = 1; // Trigger coincidence
-        #150;
+        #25;
         buttons[0] = 0; buttons[1] = 0;
-        #1125; // Just before timeout
+        #5500; // Just before timeout
         buttons[2] = 1; // Press Button C
-        #150;
+        #25;
         buttons[2] = 0; // Release Button C
         #100_000; // Allow TDC value to register
 
